@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>
+            Fantasy Ultimate Frisbee
+        </title>
+
+        <link rel="stylesheet" href="styles.css">
+
+        
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="top-row">
+
+                <div class="league">
+
+                    <button class="league-button">
+                        UFA
+                    </button>
+                </div>
+                <div class="league">
+                    <button class="league-button">
+                        FRIENDS
+                    </button> 
+           
+                </div>
+                <div class="login">
+                    <button class="login-button">
+                        LOGIN
+                    </button>
+                </div>
+
+            </div>
+            <div class="roster">
+                <h2>
+                    Roster
+                </h2>
+                <ul id="roster-list">
+                    <!-- add players to roster here via roster-list id -->
+                </ul>
+
+            </div>
+            <div class="players">
+                <h2>
+                    Players
+                </h2>
+                <ul id="player-list">
+                    <!-- add players from UFA here -->
+                </ul>
+            </div>
+
+
+        </div>
+
+
+        <script>
+
+            const playerlist = document.getElementById('player-list');
+            const rosterlist = document.getElementById('roster-list');
+
+            const players = [
+                {name:'Alex Atkins', team: 'Colorado Summit'},
+                {name: 'Jeff Babbit', team: 'Boston Glory'}
+            ];
+
+            const roster = [];
+
+            function renderPlayerList() {
+                playerlist.innerHTML = '';
+                players.forEach(player => {
+                 addToPlayerList(player);
+                });
+            }
+
+            function renderRosterList() {
+                
+                rosterlist.innerHTML = '';
+                roster.forEach(rosterPlayer => {
+                    addToRosterList(rosterPlayer);
+                });
+
+            }
+
+            function addToPlayerList(player) {
+                const playerItem = document.createElement('li');
+                playerItem.textContent = `${player.name} - ${player.team}`;
+                const addButton = document.createElement('button');
+                addButton.textContent = '+';
+                addButton.onclick = () => addToRoster(player) ;
+                playerItem.appendChild(addButton);
+                playerlist.appendChild(playerItem);
+            }
+
+            function addToRoster(player) {
+                
+                players.splice(players.indexOf(player),1);
+                renderPlayerList();
+
+                const rosterItem = document.createElement('li');
+                rosterItem.textContent = `${player.name} - ${player.team}`;
+                rosterlist.appendChild(rosterItem);
+                const addButton = document.createElement('button');
+                addButton.textContent = '-';
+                addButton.onclick = () => removeFromRoster(player) ;
+                rosterItem.appendChild(addButton);
+                rosterlist.appendChild(rosterItem);
+
+                roster.push(player);
+
+            }
+
+
+            function removeFromRoster(player) {
+
+                roster.splice(roster.indexOf(player),1);
+                renderRosterList();
+
+                const playerItem = document.createElement('li');
+                playerItem.textContent = `${player.name} - ${player.team}`;
+                const addButton = document.createElement('button');
+                addButton.textContent = '+';
+                addButton.onclick = () => addToRoster(player) ;
+                playerItem.appendChild(addButton);
+                playerlist.appendChild(playerItem);
+
+                players.push(player);
+
+            }
+
+
+            function addToRosterList(rosterPlayer) {
+                const rosterItem = document.createElement('li');
+                rosterItem.textContent = `${rosterPlayer.name} - ${rosterPlayer.team}`;
+                const addButton = document.createElement('button');
+                addButton.textContent = '+';
+                addButton.onclick = () => removeFromRoster(rosterPlayer) ;
+                rosterItem.appendChild(addButton);
+                rosterlist.appendChild(rosterItem);
+            }
+            
+
+
+
+            renderPlayerList();
+            
+
+
+        </script>
+
+
+    </body>
+</html>
