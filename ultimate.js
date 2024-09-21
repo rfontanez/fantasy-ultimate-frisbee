@@ -5,13 +5,8 @@ let playerlist = document.getElementById('player-list'); //should these be const
 let rosterlist = document.getElementById('roster-list');
 let rosterlistCounter = 0;
 
-
-let players = {}//this is an object now, will use as dictionary
-//     {name:'Alex Atkins', team: 'Colorado Summit'},
-//     {name: 'Jeff Babbit', team: 'Boston Glory'}
-// ];
-
-let roster = {};//this is an object now
+let players =[];
+let roster = [];
 
 //note
 async function fetchPlayers() {
@@ -35,83 +30,85 @@ async function fetchPlayers() {
 }
 
 
-function renderPlayerList(players) {
-    playerlist.innerHTML = '';
-    console.log(' trying to renderPlayerList:', players);
-    players.forEach(player => {
-        addToPlayerList(player);
+
+
+function renderPlayerList() {
+    let playerListHTML = '';
+
+    players.forEach((player, index) => {
+        const { name, goals } = player;
+        const html = `
+            <div>${name}</div>
+            <div>${goals}</div>
+            <button class="add-roster-button js-add-roster-button">+</button>
+        `;
+        playerListHTML += html;
     });
-}
 
-function addToPlayerList(player) {
-    const playerItem = document.createElement('li');
-    playerItem.textContent = `${player.name} - ${player.goals}`;
-    const addButton = document.createElement('button');
-    addButton.textContent = '+';
+    document.querySelector('.js-player-list')
+        .innerHTML = playerListHTML;
+    document.querySelectorAll('.js-add-roster-button')
+        .forEach((addRosterButton, index) => {
+            addRosterButton.addEventListener('click', () => {
+                
+                if (rosterlistCounter < 7) {
 
-    // addButton.onclick = () => addToRoster(player) ;
-    addButton.onclick = () => addToRoster(playerItem, player);
-
-    playerItem.appendChild(addButton);
-    playerlist.appendChild(playerItem);
-}
-
-function addToRoster(playerItem, player) {
-
-    //Question: Is this actually able to access players object? ie scope?
-    // players.splice(players.indexOf(player),1);
+                    roster.push(players[index]);
+                    renderRosterList();
     
     
-    // renderPlayerList(players);
-    if (rosterlistCounter < 12) {
-        const rosterItem = document.createElement('li');
-        rosterItem.textContent = `${player.name} - ${player.goals}`;
-        rosterlist.appendChild(rosterItem);
-        const addButton = document.createElement('button');
-        addButton.textContent = '-';
-        
-        // addButton.onclick = () => removeFromRoster(rosterItem, player);
-        addButton.addEventListener('click', () => removeFromRoster(rosterItem, player));
+                    players.splice(index, 1);
+                    renderPlayerList();
 
-        rosterItem.appendChild(addButton);
-        rosterlist.appendChild(rosterItem);
-        console.log('players in rosterlist:', rosterlist);
+                    rosterlistCounter++;
+                }
+                else {
+                    alert("Roster Full")
+                }
 
-        // remove player from playerlist
-        playerlist.removeChild(playerItem);
-        rosterlistCounter++;
-    }
-    else {alert("Roster Full")}
+                
+            });
+        });
 }
 
+function renderRosterList() {
+    let rosterListHTML = '';
 
-function removeFromRoster(rosterItem, player) {
+    roster.forEach((player, index) => {
+        const { name, goals } = player;
+        const html = `
+            <div>${name}</div>
+            <div>${goals}</div>
+            <button class="remove-roster-button js-remove-roster-button">-</button>
+        `;
+        rosterListHTML += html;
+    });
 
-    const playerItem = document.createElement('li');
-    playerItem.textContent = `${player.name} - ${player.goals}`;
-    const addButton = document.createElement('button');
-    addButton.textContent = '+';
+    document.querySelector('.js-roster-list')
+        .innerHTML = rosterListHTML;
+    document.querySelectorAll('.js-remove-roster-button')
+        .forEach((removeRosterButton, index) => {
+            removeRosterButton.addEventListener('click', () => {
 
-    // addButton.onclick = () => addToRoster(playerItem, player);
-    addButton.addEventListener('click', () => addToRoster(playerItem, player));
+                players.push(roster[index]);              
+                renderPlayerList();
 
-    playerItem.appendChild(addButton);
-    playerlist.appendChild(playerItem);
-    rosterlist.removeChild(rosterItem);
-    rosterlistCounter--;
+                roster.splice(index, 1);
+                renderRosterList();
 
-    // players.push(player);
-
+                rosterlistCounter--;
+            })
+        })
 }
-
 
 //note
 fetchPlayers().then(players => {
     if (players) {
         console.log('Players to render :', players);
-        renderPlayerList(players);
+
+        renderPlayerList();
     }
 });
-//renderPlayerList();
+
 
 
