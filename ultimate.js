@@ -15,6 +15,7 @@ async function fetchPlayers() {
     try {
 
         const response = await fetch('http://127.0.0.1:5000/players');// /players means it goes to the function that @app.route says
+        // const response = await fetch('https://www.backend.audlstats.com/web-api/player-stats?limit=20&year=2024'); //this is another way to get stats. basically using the same api as the ufa frontend does to get stats. In order to use this, change "players" to "players.stats." - this should already be in the code but just commented out.
         console.log('Fetch response:', response);  // Debug: Log the response object
 
         if (!response.ok) {
@@ -34,8 +35,9 @@ async function fetchPlayers() {
 
 function renderPlayerList() {
     let playerListHTML = '';
-
     players.forEach((player, index) => {
+    // players.stats.forEach((player, index) => {
+   
         const { name, goals } = player;
         const html = `
             <div>${name}</div>
@@ -54,10 +56,11 @@ function renderPlayerList() {
                 if (rosterlistCounter < 7) {
 
                     roster.push(players[index]);
+                    // roster.push(players.stats[index]);
                     renderRosterList();
     
-    
-                    players.splice(index, 1);
+                    players.splice(index,1);
+                    // players.stats.splice(index, 1);
                     renderPlayerList();
 
                     rosterlistCounter++;
@@ -90,7 +93,8 @@ function renderRosterList() {
         .forEach((removeRosterButton, index) => {
             removeRosterButton.addEventListener('click', () => {
 
-                players.push(roster[index]);              
+                players.push(roster[index]);
+                // players.stats.push(roster[index]);              
                 renderPlayerList();
 
                 roster.splice(index, 1);
@@ -105,7 +109,6 @@ function renderRosterList() {
 fetchPlayers().then(players => {
     if (players) {
         console.log('Players to render :', players);
-
         renderPlayerList();
     }
 });
