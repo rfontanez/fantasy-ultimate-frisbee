@@ -1,0 +1,144 @@
+/* styles.css */
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f5; /* Soft background color */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Header styles */
+.header {
+    color: #333; /* Dark text color for headings */
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Remove default list styles */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Flexbox container for side-by-side lists */
+.list-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Each list will take up equal space */
+.list-container > div {
+    flex: 1;
+    margin: 0 10px;
+}
+
+/* Player and roster list styles */
+.js-player-list,
+.js-roster-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+    align-items: center;
+    width: 100%;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    max-height: 400px; /* Limit the height to enable scrolling */
+}
+
+.js-player-list {
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    max-height: 400px; /* Limit the height to enable scrolling */
+}
+
+.js-roster-list {
+    /* position: sticky; */
+    /* top: 20px; Keep the roster at the top as you scroll */
+}
+
+/* List items styles */
+.js-player-list li,
+.js-roster-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff; /* White background for list items */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    width: 100%; /* Ensures full width within the list */
+    box-sizing: border-box;
+}
+
+/* Hover effect for player items */
+.js-player-list li:hover,
+.js-roster-list li:hover {
+    background-color: #f9f9fc; /* Light hover background */
+}
+
+/* Player info container */
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.player-name,
+.player-goals, 
+.player-blocks,
+.player-assists,
+.player-drops {
+    margin-right: 10px;
+}
+
+/* Label styling */
+label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #444; /* Darker color for text labels */
+}
+
+/* Button styles */
+.roster-button {
+    background-color: #007bff; /* Blue background for buttons */
+    color: #fff; /* White text */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+.roster-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Specific container for player and roster lists */
+.js-player-list, .js-roster-list {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+/* Adjust spacing between player items */
+.js-player-list li, .js-roster-list li {
+    padding: 12px;
+}
+
+/* Optional: Add spacing between the list container */
+.list-container > div {
+    flex: 1;
+    margin: 10px;
+}
