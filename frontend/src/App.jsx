@@ -3,6 +3,7 @@ import "./styles.css"
 import { PlayerList } from './PlayerList'
 import { Login } from './Login'
 import { RosterList } from './RosterList'
+import axios from "axios";
 
 export default function App() {
 
@@ -12,6 +13,7 @@ export default function App() {
   useEffect(() => {
     async function fetchPlayers() {
         try {
+
             const response = await fetch("http://127.0.0.1:5000/players"); 
             // const response = await fetch("https://www.backend.ufastats.com/web-v1/player-stats?limit=20&teamID=5")
             console.log("Fetch response:", response); // Debug: Log the response object

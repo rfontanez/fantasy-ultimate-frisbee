@@ -1,8 +1,14 @@
-from flask import request, jsonify
+from flask import Flask, request, jsonify
 from config import app, db
 from models import Player, User
+from flask_cors import CORS
+import requests
 
 #CRUD API. Create, Read, Update, Delete
+
+app = Flask(__name__)
+CORS(app)
+
 
 @app.route("/users", methods=["GET"])
 def get_users():
@@ -62,6 +68,11 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({"message": "User deleted."}), 200
+
+
+
+
+
 
 if __name__ == "__main__": #this just makes sure it doesnt run when we import the file and only when we run the file
     with app.app_context():

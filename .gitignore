@@ -4,3 +4,6 @@ venv/
 # Ignore Python bytecode files
 __pycache__/
 *.pyc
+
+# Ignore .env files
+.env

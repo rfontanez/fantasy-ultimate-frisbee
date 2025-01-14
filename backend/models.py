@@ -19,6 +19,7 @@ class Player(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    sub = db.Colmn(db.Integer, p)
     given_name = db.Column(db.String(100), unique=False, nullable=False)
     family_name = db.Column(db.String(100), unique=False, nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)

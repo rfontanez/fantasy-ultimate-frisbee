@@ -9,22 +9,35 @@ import { jwtDecode } from "jwt-decode";
 
 export function Login() {
 
+  async function loginUser(userCredentials) {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/login", {
+        credentials: userCredentials
+      });
+      console.log("Backend response: ", response.data);
+    }
+    catch (error) {
+      console.error("Error logging in: ", error);
+    }
+  }
+
+
   return (
-      
       <GoogleLogin
         onSuccess={credentialResponse => {
+
+          console.log("RAW credential: ", credentialResponse.credential)
+
+          loginUser(credentialResponse.credential)
+
+
           const credentialResponseDecoded = jwtDecode(
             credentialResponse.credential
           );
 
-
-          // const validateUser = async () => {
-          //   const response = await fetch("http://127.0.0.1:5000/")
-          // } 
-
-
-          console.log("test1: credential response decoded: ", credentialResponseDecoded)
+          console.log("credential response decoded: ", credentialResponseDecoded)
         }}
+
         onError={() => {
           console.log('Login Failed');
         }}
