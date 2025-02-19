@@ -3,6 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+import mysql.connector
+
+# this sets up the connection to the mysql server and signs into the specific database user for the app using .env file. Then models.py sets up the database.
 
 app = Flask(__name__)
 CORS(app)

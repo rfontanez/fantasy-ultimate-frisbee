@@ -3,6 +3,7 @@ import "./styles.css"
 import { PlayerList } from './PlayerList'
 import { Login } from './Login'
 import { RosterList } from './RosterList'
+
 import axios from "axios";
 
 export default function App() {
@@ -89,8 +90,12 @@ export default function App() {
 
   return (
     <>
-      <h1 className="header">Player Login</h1>
-      <Login/>
+      <div className='login-container'>
+        <h1>Player Login</h1>
+        <Login/>
+      </div>
+
+
       <div className='list-container'>
         <div>
           <h1 className="header">Players</h1>

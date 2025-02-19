@@ -40,6 +40,9 @@ ul {
     margin: 0 10px;
 }
 
+.login-container {
+}
+
 /* Player and roster list styles */
 .js-player-list,
 .js-roster-list {

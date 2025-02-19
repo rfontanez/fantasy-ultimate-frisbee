@@ -1,18 +1,16 @@
 from flask import Flask, jsonify, request
-
 from audl.stats.endpoints.playerstats import PlayerStats
-
 import pandas as pd
-
 from flask_cors import CORS
-
 import requests #standard requests library
-
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests #aliased to avoid conflicts
-
 import os
 from dotenv import load_dotenv
+
+# database imports
+from config import app, db
+from models import Player, User
 
 # import id_token from google.oauth2
 
@@ -67,7 +65,7 @@ def verify_user(user_credentials):
 
         id_info = id_token.verify_oauth2_token(user_credentials, verify_request, client_id)
 
-        return True, jsonify({"message": "User verified", "id_info: ": str(id_info)})
+        return True, jsonify({"message": "User verified", "id_info: ": str(id_info)}), id_info
 
         # return jsonify({"message": "User verified.", "sub": id_info.get("sub")})
 
@@ -79,9 +77,31 @@ def verify_user(user_credentials):
         # Catch other unexpected errors
         return False, jsonify({"message": "An unexpected error occurred", "error": str(e)}), 500
     
-# def user_exists(user_sub):
-#     pass
+def get_user(user_sub):
+    user = User.query.filter_by(sub=user_sub).first()
+    if user:
+        return user
+    else:
+        return False
     
+
+def create_user(user_credentials):
+    given_name = user_credentials.get("givenName")
+    family_name = user_credentials.get("familyName")
+    email = user_credentials.get("email")
+    sub = user_credentials.get("sub")
+    new_user = User(given_name=given_name,family_name=family_name, email=email, sub=sub)
+    db.session.add(new_user)
+    db.session.commit()
+    user = User.query.filter_by(sub=sub).first()
+    if user:
+        return user
+    else:
+        return False 
+
+
+
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
@@ -91,26 +111,34 @@ def home():
 
 @app.route('/login', methods=["POST"])
 def login_user():
-    user_data = request.json
-    user_credentials = user_data.get("credentials")
+    login_request = request.json
+    # user_data = request.json
+    user_credentials_encoded = login_request.get("credentials")
 
-    is_verified, verify_response = verify_user(user_credentials)
+    # user_sub = user_credentials.get("sub")
+    
+
+    is_verified, verify_response_json, id_info = verify_user(user_credentials_encoded) #verify_response_json is already jsonified, can be just returned directly to frontend
+    user_sub= id_info.get("sub")
+
+    # return verify_response_json
 
     if is_verified:
-        #next check backend to see if its a new user
+        #next check database to see if its a new user
+
+        user = get_user(user_sub)
+
+        if (user):
+            return (jsonify({"message": "User already in database.", "user_info: ": user}), verify_response_json)
+            
+        else:
         #if not, create a new entry for new user
-        
+            user = create_user(id_info)
+            return (jsonify({"message": "New user created.", "user_info: ": user}), verify_response_json)
 
-
-        #here return message from verify_repsonse()
-        return verify_response
-    
     else: 
-        return verify_response
+        return verify_response_json
 
-
-
-    # return jsonify({"message": "RYAN LOGGED IN", "sub": user_sub})
 
 
 @app.route('/players')

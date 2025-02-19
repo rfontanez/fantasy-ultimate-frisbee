@@ -28,14 +28,17 @@ export function Login() {
 
           console.log("RAW credential: ", credentialResponse.credential)
 
-          loginUser(credentialResponse.credential)
-
-
           const credentialResponseDecoded = jwtDecode(
             credentialResponse.credential
           );
 
           console.log("credential response decoded: ", credentialResponseDecoded)
+
+          // loginUser(credentialResponseDecoded)
+          loginUser(credentialResponse.credential) // this is what I usually do but im debugging an issue and tried the above. it didnt work :/
+
+
+
         }}
 
         onError={() => {

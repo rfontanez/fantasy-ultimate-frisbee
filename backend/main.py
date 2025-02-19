@@ -10,6 +10,12 @@ app = Flask(__name__)
 CORS(app)
 
 
+
+    
+
+
+
+
 @app.route("/users", methods=["GET"])
 def get_users():
    users = User.query.all()
