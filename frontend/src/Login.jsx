@@ -37,8 +37,6 @@ export function Login() {
           // loginUser(credentialResponseDecoded)
           loginUser(credentialResponse.credential) // this is what I usually do but im debugging an issue and tried the above. it didnt work :/
 
-
-
         }}
 
         onError={() => {

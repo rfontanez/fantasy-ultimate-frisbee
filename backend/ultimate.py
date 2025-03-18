@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 
 # database imports
 from config import app, db
-from models import Player, User
+# from models import Player, User
+from models import *
 
 # import id_token from google.oauth2
 
@@ -64,8 +65,9 @@ def verify_user(user_credentials):
         verify_request = google_requests.Request()
 
         id_info = id_token.verify_oauth2_token(user_credentials, verify_request, client_id)
-
-        return True, jsonify({"message": "User verified", "id_info: ": str(id_info)}), id_info
+       
+        # return True, jsonify({"message": "User verified", "id_info: ": str(id_info)}), id_info
+        return True, {"message": "User verified", "id_info: ": str(id_info)}, id_info
 
         # return jsonify({"message": "User verified.", "sub": id_info.get("sub")})
 
@@ -85,9 +87,10 @@ def get_user(user_sub):
         return False
     
 
+
 def create_user(user_credentials):
-    given_name = user_credentials.get("givenName")
-    family_name = user_credentials.get("familyName")
+    given_name = user_credentials.get("given_name")
+    family_name = user_credentials.get("family_name")
     email = user_credentials.get("email")
     sub = user_credentials.get("sub")
     new_user = User(given_name=given_name,family_name=family_name, email=email, sub=sub)
@@ -102,7 +105,7 @@ def create_user(user_credentials):
 
 
 
-app = Flask(__name__)
+# app = Flask(__name__) this is commented out cause its in config.py already and we import it in at the top of this file
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 @app.route('/')
@@ -129,12 +132,12 @@ def login_user():
         user = get_user(user_sub)
 
         if (user):
-            return (jsonify({"message": "User already in database.", "user_info: ": user}), verify_response_json)
+            return jsonify({"message": "User already in database.", "user_info: ": user.to_json(), "verify response: ": verify_response_json})
             
         else:
         #if not, create a new entry for new user
             user = create_user(id_info)
-            return (jsonify({"message": "New user created.", "user_info: ": user}), verify_response_json)
+            return jsonify({"message": "New user created.", "user_info: ": user.to_json(), "response info: ": verify_response_json})
 
     else: 
         return verify_response_json
@@ -152,6 +155,13 @@ def get_players():
     # return jsonify(players)
     return jsonify(players) 
 
+
+
+
 if __name__ == '__main__':
+    with app.app_context():
+        # print(db.engine.url)
+        # db.create_all()  # This creates all tables based on models.py
+        pass
     app.run(debug=True)
 
